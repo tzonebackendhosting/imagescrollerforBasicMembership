@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landscape Image Scroller</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        
+        .container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        
+        .scroller {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .landscape-image {
+            height: 100%;
+            display: inline-block;
+        }
+        
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 1s;
+        }
+        
+        .instructions.fade {
+            opacity: 0;
+        }
+        
+        .navigation {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .nav-button {
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 0 20px;
+            pointer-events: auto;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="scroller" id="scroller">
+            <!-- Using the Imgur image URL -->
+            <img id="landscapeImage" class="landscape-image" src="https://i.imgur.com/TZBWARo.jpeg" alt="Panoramic landscape image">
+        </div>
+        
+        <div class="navigation">
+            <button class="nav-button" id="navLeft">←</button>
+            <button class="nav-button" id="navRight">→</button>
+        </div>
+        
+        <div class="instructions" id="instructions">
+            <p>Scroll horizontally to explore the image or use the arrow buttons</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scroller = document.getElementById('scroller');
+            const instructions = document.getElementById('instructions');
+            const navLeft = document.getElementById('navLeft');
+            const navRight = document.getElementById('navRight');
+            
+            // Fade out instructions after 5 seconds
+            setTimeout(() => {
+                instructions.classList.add('fade');
+            }, 5000);
+            
+            // Navigation buttons functionality
+            navLeft.addEventListener('click', function() {
+                scroller.scrollBy({
+                    left: -window.innerWidth / 2,
+                    behavior: 'smooth'
+                });
+            });
+            
+            navRight.addEventListener('click', function() {
+                scroller.scrollBy({
+                    left: window.innerWidth / 2,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    scroller.scrollBy({
+                        left: -100,
+                        behavior: 'smooth'
+                    });
+                } else if (e.key === 'ArrowRight') {
+                    scroller.scrollBy({
+                        left: 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+            
+            // Show instructions again when clicked
+            instructions.addEventListener('click', function() {
+                instructions.classList.remove('fade');
+                
+                setTimeout(() => {
+                    instructions.classList.add('fade');
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>
